@@ -1,153 +1,265 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JFCM Taytay Login</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JFCM Taytay File Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body { 
+    font-family: 'Roboto', sans-serif; 
+    display: flex; justify-content: center; align-items: center; 
+    min-height: 100vh; 
+    margin: 0; 
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)),
+                url('https://scontent.fmnl17-4.fna.fbcdn.net/v/t39.30808-6/476758085_1025079269656180_1508840151996929921_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=_ReU3GkJs5AQ7kNvwFJtgKv&_nc_oc=AdlPpscxYoBe9g4Dae6SXd8SP9S1_ioA207PYbYorCAA2QByrjCRxwWvleUdvUgoz7A&_nc_zt=23&_nc_ht=scontent.fmnl17-4.fna&_nc_gid=IJs6CRB_3-4tiip30yaB-Q&oh=00_AfUaAJAsEM1bu2MGoqc3nHFzGJXwRrAhdjpIYEt8dadGmQ&oe=68BB3577') 
+                no-repeat center center/cover;
+  }
 
-   body {
-  font-family: 'Segoe UI', sans-serif;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Fade effect from top (transparent) to bottom (dark) */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)),
-              url('https://scontent.fmnl17-4.fna.fbcdn.net/v/t39.30808-6/476758085_1025079269656180_1508840151996929921_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=_ReU3GkJs5AQ7kNvwFJtgKv&_nc_oc=AdlPpscxYoBe9g4Dae6SXd8SP9S1_ioA207PYbYorCAA2QByrjCRxwWvleUdvUgoz7A&_nc_zt=23&_nc_ht=scontent.fmnl17-4.fna&_nc_gid=IJs6CRB_3-4tiip30yaB-Q&oh=00_AfUaAJAsEM1bu2MGoqc3nHFzGJXwRrAhdjpIYEt8dadGmQ&oe=68BB3577') 
-              no-repeat center center/cover;
-  position: relative;
+  .container { 
+    background: rgba(255,255,255,0.97); 
+    padding: 40px; 
+    border-radius: 25px; 
+    width: 500px; 
+    max-width: 95%; 
+    text-align: center; 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
+    transition: all 0.3s ease;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  input, button { 
+    width: 95%; 
+    padding: 14px; 
+    margin: 12px 0; 
+    border-radius: 15px; 
+    font-size: 1rem; 
+    border: 1px solid #b2ebf2; 
+    outline: none;
+  }
+
+  input:focus { border-color: #26a69a; box-shadow: 0 0 5px rgba(38,166,154,0.5); }
+
+button { 
+  background: #006400; /* dark green */
+  color: #006400; 
+  border: none; 
+  cursor: pointer; 
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+button:hover { 
+  background: #004d00; /* darker green on hover */
 }
 
 
-    .login-box {
-      position: relative;
-      background: rgba(255,255,255,0.97);
-      padding: 60px 50px;
-      border-radius: 30px;
-      width: 500px;
-      max-width: 95%;
-      text-align: center;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
-      animation: fadeIn 1s ease-in-out;
-    }
+  .error { color: red; margin-top: 10px; }
 
-    .login-box img {
-      width: 130px;
-      border-radius: 50%;
-      margin-bottom: 30px;
-      border: 4px solid #2e7d32;
-    }
+  /* Folder styles */
+  .folder { 
+    margin-top: 15px; 
+    text-align: left; 
+    border-radius: 12px; 
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background: #f1f8f9;
+    transition: 0.3s;
+  }
 
-    .login-box h2 {
-      margin-bottom: 30px;
-      color: #2e7d32;
-      font-size: 1.6rem;
-    }
+  .folder:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-    input {
-      width: 95%;
-      padding: 16px;
-      margin: 12px 0;
-      border: 1px solid #ccc;
-      border-radius: 15px;
-      outline: none;
-      font-size: 1.1rem;
-      transition: 0.3s;
-    }
+  .folder-header { 
+    display: flex; align-items: center; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    background: #26a69a; 
+    color: white; 
+    font-weight: 500;
+    justify-content: space-between;
+  }
 
-    input:focus {
-      border-color: #2e7d32;
-      box-shadow: 0 0 12px rgba(46,125,50,0.6);
-    }
+  .folder-header span { display: flex; align-items: center; gap: 10px; }
 
-    button {
-      background: #2e7d32;
-      color: white;
-      border: none;
-      padding: 16px;
-      border-radius: 15px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 1.1rem;
-      transition: 0.3s;
-      margin-top: 16px;
-    }
+  .folder-header:hover { background: #00796b; }
 
-    button:hover {
-      background: #14532d;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    }
+  .folder-content { 
+    display: none; 
+    padding-left: 20px; 
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    background: #e0f2f1;
+  }
 
-    .error {
-      color: red;
-      margin-top: 15px;
-      font-size: 1rem;
-    }
+  .folder-content a { 
+    display: block; 
+    text-decoration: none; 
+    color: #00796b; 
+    margin: 5px 0; 
+    padding: 5px 10px; 
+    border-radius: 8px;
+    transition: 0.2s;
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
+  .folder-content a:hover { 
+    background: #b2dfdb; 
+    color: #004d40; 
+  }
 
-    @media (max-width: 600px) {
-      .login-box {
-        padding: 40px 30px;
-        width: 90%;
-      }
+#login-box h2 {
+  color: #006400; /* dark green */
+  font-weight: 700;
+}
 
-      .login-box h2 {
-        font-size: 1.4rem;
-      }
 
-      input {
-        padding: 14px;
-        font-size: 1rem;
-      }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-      button {
-        padding: 14px;
-        font-size: 1rem;
-      }
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="login-box">
-    <img src="https://scontent.fmnl17-2.fna.fbcdn.net/v/t39.30808-6/308986411_456853616478751_1968050896292484962_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KYLR5qPUdN8Q7kNvwEtYLxe&_nc_oc=Adm9YssLgmfDb3dkGA-y2GF8Idhar6DGOMVCPmB-MmrLYbcrDGD5_Gp68OkMSw77Xe8&_nc_zt=23&_nc_ht=scontent.fmnl17-2.fna&_nc_gid=94tWQNsBobMYJ2tzhQsICQ&oh=00_AfW0xSXiqsnlYACcQLG5C6amQnD7TFE55wLalfduIc-yNA&oe=68BB1ADC" alt="Church Logo">
+<div class="container" id="main-container">
+
+  <!-- Login Box -->
+  <div id="login-box">
     <h2>Jesus First Christian Ministries - Taytay</h2>
-    <input type="text" id="username" placeholder="Enter Username">
+    <input type="email" id="email" placeholder="Enter Email">
     <input type="password" id="password" placeholder="Enter Password">
-    <button onclick="login()">Login</button>
+    <button onclick="siteLogin()">Login</button>
     <p class="error" id="error-message"></p>
   </div>
 
-  <script>
-    const users = [
-      { username: "user1", password: "pass123" },
-      { username: "user2", password: "456pass" },
-      { username: "user3", password: "welcome3" },
-      { username: "user4", password: "secret4" },
-      { username: "user5", password: "qwerty5" },
-      { username: "user6", password: "mypass6" },
-      { username: "user7", password: "login777" },
-      { username: "user8", password: "testpass8" },
-      { username: "user9", password: "9password" },
-      { username: "user10", password: "admin10" }
-    ];
+  <!-- Drive Box -->
+  <div id="drive-box" style="display:none;">
+    <h2>Folders</h2>
+    <div id="foldersContainer"></div>
+  </div>
 
-    function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const validUser = users.find(user => user.username === username && user.password === password);
+</div>
 
-      if (validUser) {
-        window.location.href = "https://drive.google.com/drive/folders/1i2AuG5zaVImN4wnDyzYrqPGLH-B3iqCP?usp=sharing";
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://ustqtzorwudvspqhqsda.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzdHF0em9yd3VkdnNwcWhxc2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mjc1NjUsImV4cCI6MjA3MzAwMzU2NX0.6xDg0MoJDhS_Gtg1TZ-xZ47Ws5nWnqUHEnqTfiAvkVA'; // replace with your anon key
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const bucketName = 'private';
+const foldersToShow = ['Preaching', 'Simbahay test', 'Sow', 'Google Drive'];
+
+async function siteLogin() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    document.getElementById('error-message').textContent = 'Login failed: ' + error.message;
+    return;
+  }
+
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('drive-box').style.display = 'block';
+  listFolders();
+}
+
+function listFolders() {
+  const container = document.getElementById('foldersContainer');
+  container.innerHTML = '';
+  foldersToShow.forEach(folderName => {
+    createFolderElement(folderName, container);
+  });
+}
+
+function createFolderElement(folderPath, parentContainer) {
+  const folderDiv = document.createElement('div');
+  folderDiv.className = 'folder';
+
+  const folderHeader = document.createElement('div');
+  folderHeader.className = 'folder-header';
+  folderHeader.innerHTML = `<span>📁 ${folderPath}</span> <span>▼</span>`;
+  folderDiv.appendChild(folderHeader);
+
+  const filesContainer = document.createElement('div');
+  filesContainer.className = 'folder-content';
+  folderDiv.appendChild(filesContainer);
+
+  folderHeader.onclick = () => {
+    const isVisible = filesContainer.style.display === 'block';
+    filesContainer.style.display = isVisible ? 'none' : 'block';
+    folderHeader.querySelector('span:last-child').textContent = isVisible ? '▼' : '▲';
+
+    if (!filesContainer.hasChildNodes() && !isVisible) {
+      if(folderPath === 'Google Drive'){
+        // Google Drive link
+        const link = document.createElement('a');
+        link.href = 'https://drive.google.com/drive/folders/1C43FvXt3pck1fbBit1jgOoIMYU8eQzCz?usp=sharing'; // Replace with your folder ID
+        link.target = '_blank';
+        link.textContent = 'Open Google Drive';
+        filesContainer.appendChild(link);
       } else {
-        document.getElementById("error-message").textContent = "Invalid username or password!";
+        loadFiles(folderPath, filesContainer);
       }
     }
-  </script>
+  };
+
+  parentContainer.appendChild(folderDiv);
+}
+
+async function loadFiles(folderPath, container) {
+  container.innerHTML = 'Loading...';
+  const { data: items, error } = await supabase.storage.from(bucketName).list(folderPath);
+  container.innerHTML = '';
+
+  if (error) {
+    container.innerHTML = `<p style="color:red">${error.message}</p>`;
+    return;
+  }
+
+  if (!items.length) {
+    container.innerHTML = `<p>No files in this folder.</p>`;
+    return;
+  }
+
+  for (const item of items) {
+    if (item.type === 'folder') {
+      const subfolderDiv = document.createElement('div');
+      subfolderDiv.style.marginLeft = '20px';
+
+      const subfolderHeader = document.createElement('div');
+      subfolderHeader.className = 'folder-header';
+      subfolderHeader.innerHTML = `<span>📁 ${item.name}</span> <span>▼</span>`;
+      subfolderDiv.appendChild(subfolderHeader);
+
+      const subfolderFilesContainer = document.createElement('div');
+      subfolderFilesContainer.className = 'folder-content';
+      subfolderDiv.appendChild(subfolderFilesContainer);
+
+      subfolderHeader.onclick = () => {
+        const isVisible = subfolderFilesContainer.style.display === 'block';
+        subfolderFilesContainer.style.display = isVisible ? 'none' : 'block';
+        subfolderHeader.querySelector('span:last-child').textContent = isVisible ? '▼' : '▲';
+        if (!subfolderFilesContainer.hasChildNodes() && !isVisible) {
+          loadFiles(`${folderPath}/${item.name}`, subfolderFilesContainer);
+        }
+      };
+
+      container.appendChild(subfolderDiv);
+
+    } else {
+      const { data: urlData, error: urlError } = await supabase.storage
+        .from(bucketName)
+        .createSignedUrl(`${folderPath}/${item.name}`, 300);
+
+      if (!urlError) {
+        const link = document.createElement('a');
+        link.href = urlData.signedUrl;
+        link.target = '_blank';
+        link.textContent = `📄 ${item.name}`;
+        container.appendChild(link);
+      }
+    }
+  }
+}
+
+window.siteLogin = siteLogin;
+</script>
 </body>
 </html>
-
