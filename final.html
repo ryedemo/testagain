@@ -143,7 +143,7 @@ const supabaseUrl = 'https://ustqtzorwudvspqhqsda.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzdHF0em9yd3VkdnNwcWhxc2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mjc1NjUsImV4cCI6MjA3MzAwMzU2NX0.6xDg0MoJDhS_Gtg1TZ-xZ47Ws5nWnqUHEnqTfiAvkVA'; // replace with your anon key
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const bucketName = 'private';
-const foldersToShow = ['Preaching', 'Simbahay test', 'Sow'];
+const foldersToShow = ['Preaching', 'Simbahay test', 'Sow', 'Google Drive'];
 
 async function siteLogin() {
   const email = document.getElementById('email').value;
@@ -174,7 +174,7 @@ function createFolderElement(folderPath, parentContainer) {
 
   const folderHeader = document.createElement('div');
   folderHeader.className = 'folder-header';
-  folderHeader.innerHTML = `<span>📁 ${folderPath.split('/').pop()}</span> <span>▼</span>`;
+  folderHeader.innerHTML = `<span>📁 ${folderPath}</span> <span>▼</span>`;
   folderDiv.appendChild(folderHeader);
 
   const filesContainer = document.createElement('div');
@@ -185,8 +185,18 @@ function createFolderElement(folderPath, parentContainer) {
     const isVisible = filesContainer.style.display === 'block';
     filesContainer.style.display = isVisible ? 'none' : 'block';
     folderHeader.querySelector('span:last-child').textContent = isVisible ? '▼' : '▲';
+
     if (!filesContainer.hasChildNodes() && !isVisible) {
-      loadFiles(folderPath, filesContainer);
+      if(folderPath === 'Google Drive'){
+        // Google Drive link
+        const link = document.createElement('a');
+        link.href = 'https://drive.google.com/drive/folders/1C43FvXt3pck1fbBit1jgOoIMYU8eQzCz?usp=sharing'; // Replace with your folder ID
+        link.target = '_blank';
+        link.textContent = 'Open Google Drive';
+        filesContainer.appendChild(link);
+      } else {
+        loadFiles(folderPath, filesContainer);
+      }
     }
   };
 
